@@ -39,7 +39,7 @@ class Menu(private val formations: MutableSet<Formation>) {
             }
         }
         clearConsole()
-        println("Bye \u1F44B \n\n")
+        println("Bye \u270B \n\n")
     }
 
     private fun printMenu() {
@@ -100,6 +100,20 @@ class Menu(private val formations: MutableSet<Formation>) {
         showAllFormations()
     }
 
+    private fun askFormationId():Int{
+        val id: Int
+        if (formations.isNotEmpty()) {
+            showAllFormations()
+            println(makeWhiteText("Type the ID of the formation you want to show"))
+            print("Selected Formation ID: ${startForegroundGreen()}")
+            val formationIdTypedByUser = readln().trim()
+            id =  formationIdTypedByUser.toIntOrNull() ?: -1
+        }  else {
+            println(makeYellowText("No formations registered"))
+            id = -1
+        }
+        return id
+    }
 
     private fun showFormationDetails(){
         clearConsole()
@@ -110,26 +124,30 @@ class Menu(private val formations: MutableSet<Formation>) {
             val formationIdTypedByUser = readln().trim()
             val formationId  = formationIdTypedByUser.toIntOrNull() ?: 0
             if (formationId > 0){
-                try {
-                    showAllFormationData(formationId)
-                } catch(e: FormationNotFoundException ){
-                    println(makeYellowText("There's no formation with id $formationId"))
-                }
+                showAllFormationData(formationId)
                 println("\n${makeWhiteText("Press any key to return to main menu")}")
                 readln()
             }
-
         }  else {
             println(makeYellowText("No formations registered"))
         }
     }
 
     @Throws
-    private fun showAllFormationData(formationId:Int){
+    private fun getFormationById(formationId:Int):Formation{
         val formation: Formation = formations.filter { formation -> formation.id == formationId }.getOrElse(0) {
             throw FormationNotFoundException("There's no formation with id $it")
         }
-        showFormation(formation = formation, detailed = true)
+        return formation
+    }
+    private fun showAllFormationData(formationId:Int){
+        val formation: Formation
+        try {
+            formation = getFormationById(formationId)
+            showFormation(formation = formation, detailed = true)
+        } catch(e: FormationNotFoundException ){
+            println(makeYellowText("There's no formation with id $formationId"))
+        }
     }
 
     private fun addStudentToFormation() {
@@ -285,7 +303,7 @@ class Menu(private val formations: MutableSet<Formation>) {
         println("└──────────────────────────────────────────┘")
         print("Selected: ${startForegroundGreen()}")
         val addStudentsUserAnswer: String = readln().trim().uppercase()
-        return "Y" == addStudentsUserAnswer
+        return "Y" == addStudentsUserAnswer || "YES" == addStudentsUserAnswer
     }
 
 
@@ -299,7 +317,7 @@ class Menu(private val formations: MutableSet<Formation>) {
         println("└──────────────────────────────────────────┘")
         print("Selected: ${startForegroundGreen()}")
         val addContentsUserAnswer: String = readln().trim().uppercase()
-        return "Y" == addContentsUserAnswer
+        return "Y" == addContentsUserAnswer || "YES" == addContentsUserAnswer
     }
 
 
