@@ -1,0 +1,36 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.9.10'
+    id 'application'
+}
+
+group = 'br.dev.santi'
+version = '0.1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.3'
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+run{
+    standardInput = System.in
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+kotlin {
+    jvmToolchain 17
+}
+
+
+application {
+    mainClass = 'br.dev.santi.MainKt'
+}
