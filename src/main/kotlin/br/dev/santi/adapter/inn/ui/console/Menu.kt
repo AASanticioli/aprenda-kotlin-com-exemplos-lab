@@ -38,7 +38,8 @@ class Menu(private val formations: MutableSet<Formation>) {
                 9 -> break@loop
             }
         }
-        println("Bye\n\n")
+        clearConsole()
+        println("Bye \u1F44B \n\n")
     }
 
     private fun printMenu() {
@@ -93,8 +94,8 @@ class Menu(private val formations: MutableSet<Formation>) {
             return
         }
         val formation = Formation(name = formationName, level = ContentLevel.entries[formationLevel - 1])
-        addContents(formation)
-        addStudents(formation)
+        addFormationContents(formation)
+        addFormationStudents(formation)
         formations.add(formation)
         showAllFormations()
     }
@@ -114,6 +115,8 @@ class Menu(private val formations: MutableSet<Formation>) {
                 } catch(e: FormationNotFoundException ){
                     println(makeYellowText("There's no formation with id $formationId"))
                 }
+                println("\n${makeWhiteText("Press any key to return to main menu")}")
+                readln()
             }
 
         }  else {
@@ -169,15 +172,17 @@ class Menu(private val formations: MutableSet<Formation>) {
 
 
     private fun showFormation(formation: Formation, detailed: Boolean = false){
-        val maxTitleSize = 57
+        val maxTitleSize = 55
         val idPadSize = 3
-        val formationName = makeContentText("(id: ${formation.id.toString().padStart(idPadSize, '0')}) ${formation.name}", maxTitleSize)
-        val formationLevelName = "${formation.level.name.substring(0..0)}${formation.level.name.substring(1..< formation.level.name.length).lowercase()}"
-        val formationLevel = makeContentText(formationLevelName, maxTitleSize)
+        val formationId = makeContentText(formation.id.toString().padStart(idPadSize, '0'), maxTitleSize)
+        val formationName = makeContentText(formation.name, maxTitleSize)
+        val formationDifficultLevelName = "${formation.level.name.substring(0..0)}${formation.level.name.substring(1..< formation.level.name.length).lowercase()}"
+        val formationDifficultLevel = makeContentText(formationDifficultLevelName, maxTitleSize)
         resetAllAnsiEscapes()
         println("╔═══════════════════════════════════════════════════════════════════════╗")
-        println("║ Formation: $formationName ║")
-        println("║ Formation: $formationLevel ║")
+        println("║ ID ......... $formationId ║")
+        println("║ Name ....... $formationName ║")
+        println("║ Difficult .. $formationDifficultLevel ║")
         if (detailed){
             println("╠═══════════════════════════════════════════════════════════════════════╣")
             println("║  ┌─────────────────────────────────────────────────────────────────┐  ║")
@@ -212,24 +217,20 @@ class Menu(private val formations: MutableSet<Formation>) {
     }
 
 
-    private fun addStudents(formation: Formation){
+    private fun addFormationStudents(formation: Formation){
         val userWantToAddStudents = askUserWantStudents()
         if (userWantToAddStudents){
-            println("To finish, type ${makeYellowText(EXIT_KEY)}")
-
+            println(makePurpleText("Leave blank and press <ENTER> to finish.\n"))
             loop@ do {
                 print("Student Name: ${startForegroundGreen()}")
                 val studentNameTypedByUser = readln().trim()
+                resetAllAnsiEscapes()
                 if (studentNameTypedByUser.isEmpty()){
-                    println("Invalid Student Name. Please, try again.")
-                    continue@loop
-                }
-                if (studentNameTypedByUser == EXIT_KEY){
                     break@loop
                 }
-
                 print("Student birth date ($DATE_FORMAT): ${startForegroundGreen()}")
                 val studentBirthDateTypedByUser = readln().trim()
+                resetAllAnsiEscapes()
                 if (studentBirthDateTypedByUser.isEmpty()){
                     println("Invalid Student Birth Date. Please, try again.")
                     continue@loop
@@ -252,17 +253,18 @@ class Menu(private val formations: MutableSet<Formation>) {
         }
     }
 
-    private fun addContents(formation: Formation){
+
+    private fun addFormationContents(formation: Formation){
         val userWantToAddContents = askUserWantContents()
         if (userWantToAddContents){
-            println("To finish, type ${makeYellowText(EXIT_KEY)} .")
+            println(makePurpleText("Leave blank and press <ENTER> to finish.\n"))
             var contentTypedByUser: String
             loop@ do {
                 print("New content name: ${startForegroundGreen()}")
                 contentTypedByUser = readln().trim()
+                resetAllAnsiEscapes()
                 if (contentTypedByUser.isEmpty()){
-                    println("Invalid content. Please, try again.")
-                    continue@loop
+                    break@loop
                 }
                 if (contentTypedByUser != EXIT_KEY){
                     val content = Content(contentTypedByUser)
@@ -271,6 +273,7 @@ class Menu(private val formations: MutableSet<Formation>) {
             } while(contentTypedByUser != EXIT_KEY)
         }
     }
+
 
     private fun askUserWantStudents(): Boolean{
         resetAllAnsiEscapes()
@@ -285,6 +288,7 @@ class Menu(private val formations: MutableSet<Formation>) {
         return "Y" == addStudentsUserAnswer
     }
 
+
     private fun askUserWantContents(): Boolean{
         resetAllAnsiEscapes()
         println("┌──────────────────────────────────────────┐")
@@ -297,6 +301,7 @@ class Menu(private val formations: MutableSet<Formation>) {
         val addContentsUserAnswer: String = readln().trim().uppercase()
         return "Y" == addContentsUserAnswer
     }
+
 
     private fun getFormationLevel():Int{
         resetAllAnsiEscapes()

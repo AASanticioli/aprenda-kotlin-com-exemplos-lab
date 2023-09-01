@@ -22,6 +22,8 @@ object AnsiEscape {
     private const val ANSI_CLEARS_ENTIRE_SCREEN = "${ANSI_ESC}[2J"
     private const val ANSI_ITALIC = "${ANSI_ESC}[3m"
 
+    private const val UNICODE_KEYBOARD_CODE = "\u2328"
+
     private const val EXIT_KEY = "q"
     private const val DATE_FORMAT = "dd/MM/yyyy"
     private val formatter = DateTimeFormatter.ofPattern(DATE_FORMAT)
@@ -53,6 +55,10 @@ object AnsiEscape {
 
     fun startForegroundGreen():String{
         return ANSI_FOREGROUND_GREEN
+    }
+
+    fun makeKeyboard():String{
+        return UNICODE_KEYBOARD_CODE
     }
 
     fun resetAllAnsiEscapes(){
