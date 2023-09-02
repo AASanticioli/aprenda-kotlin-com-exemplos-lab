@@ -15,20 +15,21 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
 class Menu(private val formations: MutableSet<Formation>) {
-    companion object Constants{
+    companion object Constants {
         private const val EXIT_KEY = "q"
         private const val DATE_FORMAT = "dd/MM/yyyy"
         private const val RETURNING_TO_MAIN_MENU = "Returning to main menu..."
         private val formatter = DateTimeFormatter.ofPattern(DATE_FORMAT)
     }
 
-    fun run(){
+
+    fun run() {
         println("Hello and Welcome.\n")
-        loop@ while(true){
+        loop@ while (true) {
             printMenu()
             val userCommand = readln()
             val mainCommand: Int = userCommand.toIntOrNull() ?: 0
-            when (mainCommand){
+            when (mainCommand) {
                 1 -> showAllFormationsOnce()
                 2 -> addFormation()
                 3 -> showFormationDetails()
@@ -53,17 +54,19 @@ class Menu(private val formations: MutableSet<Formation>) {
         println("├─────────────────────────────────────────────┤")
         println("│ ${makeYellowText("1")} ... ${makeBlueText("Show All Formations")}                   │")
         println("│                                             │")
-        println("│ ${makeYellowText("2")} ... ${makeBlueText("Add Formation")}                         │")
+        println("│ ${makeYellowText("2")} ... ${makeBlueText("Add a Formation")}                       │")
         println("│                                             │")
         println("│ ${makeYellowText("3")} ... ${makeBlueText("Show Formation Details")}                │")
         println("│                                             │")
-        println("│ ${makeYellowText("4")} ... ${makeBlueText("Add Contents to an Formation")}          │")
+        println("│ ${makeYellowText("4")} ... ${makeBlueText("Add Contents to a Formation")}           │")
         println("│                                             │")
-        println("│ ${makeYellowText("5")} ... ${makeBlueText("Add Students to an Formation")}          │")
+        println("│ ${makeYellowText("5")} ... ${makeBlueText("Add Students to a Formation")}           │")
         println("│                                             │")
-        println("│ ${makeYellowText("6")} ... ${makeBlueText("Remove some Contents of an Formation")}  │")
+        println("│ ${makeYellowText("6")} ... ${makeBlueText("Remove some Contents of a Formation")}   │")
         println("│                                             │")
-        println("│ ${makeYellowText("7")} ... ${makeBlueText("Remove some Students of an Formation")}  │")
+        println("│ ${makeYellowText("7")} ... ${makeBlueText("Remove some Students of a Formation")}   │")
+        println("│                                             │")
+        println("│ ${makeYellowText("8")} ... ${makeBlueText("Remove a Formation")}                    │")
         println("│                                             │")
         println("│ ${makeRedText("9")} ... ${makeBlueText("Exit")}                                  │")
         println("│                                             │")
@@ -72,7 +75,7 @@ class Menu(private val formations: MutableSet<Formation>) {
     }
 
 
-    private fun showAllFormationsOnce(){
+    private fun showAllFormationsOnce() {
         showAllFormations()
         println("\n${makeWhiteText("Press any key to return to main menu")}")
         readln()
@@ -87,14 +90,15 @@ class Menu(private val formations: MutableSet<Formation>) {
 
         print("New formation name: ${startForegroundGreen()}")
         val newFormationNameTypedByUser: String = readln().trim()
-        if (newFormationNameTypedByUser.isEmpty()){
+        if (newFormationNameTypedByUser.isEmpty()) {
             println("The name must be informed.")
             println(RETURNING_TO_MAIN_MENU)
             return
         }
-        val formationName = if (newFormationNameTypedByUser.length>90)   newFormationNameTypedByUser.substring(1..90) else newFormationNameTypedByUser
+        val formationName =
+            if (newFormationNameTypedByUser.length > 90) newFormationNameTypedByUser.substring(1..90) else newFormationNameTypedByUser
         val formationLevel = getFormationLevel()
-        if (formationLevel == -1){
+        if (formationLevel == -1) {
             println(RETURNING_TO_MAIN_MENU)
             return
         }
@@ -106,47 +110,23 @@ class Menu(private val formations: MutableSet<Formation>) {
     }
 
 
-    private fun showFormationDetails(){
+    private fun showFormationDetails() {
         clearConsole()
         if (formations.isNotEmpty()) {
             showAllFormations()
             println(makeWhiteText("Please, type the ID of the formation you want to show"))
             print("Selected Formation ID: ${startForegroundGreen()}")
             val formationIdTypedByUser = readln().trim()
-            val formationId  = formationIdTypedByUser.toIntOrNull() ?: 0
-            if (formationId > 0){
+            val formationId = formationIdTypedByUser.toIntOrNull() ?: 0
+            if (formationId > 0) {
                 clearConsole()
                 showAllFormationData(formationId)
                 println("\n${makeWhiteText("Press any key to return to main menu")}")
                 readln()
             }
-        }  else {
+        } else {
             println(makeYellowText("There are no formations registered"))
         }
-    }
-
-
-    private fun addFormationStudent() {
-        clearConsole()
-        if (formations.isNotEmpty()) {
-            showAllFormations()
-            println(makeWhiteText("Please, type the ID of the formation"))
-            print("Selected Formation ID: ${startForegroundGreen()}")
-            val formationIdTypedByUser = readln().trim()
-            val formationId  = formationIdTypedByUser.toIntOrNull() ?: 0
-            if (formationId > 0){
-                try {
-                    val formation = getFormationById(formationId)
-                    addFormationStudents(formation = formation, confirmWithUser = false)
-                } catch(e: FormationNotFoundException ){
-                    println(makeYellowText("There's no formation with id $formationId"))
-                }
-            }
-        }  else {
-            println(makeYellowText("There are no formations registered"))
-        }
-        println("\n${makeWhiteText("Press any key to return to main menu")}")
-        readln()
     }
 
 
@@ -157,16 +137,16 @@ class Menu(private val formations: MutableSet<Formation>) {
             println(makeWhiteText("Please, type the ID of the formation"))
             print("Selected Formation ID: ${startForegroundGreen()}")
             val formationIdTypedByUser = readln().trim()
-            val formationId  = formationIdTypedByUser.toIntOrNull() ?: 0
-            if (formationId > 0){
+            val formationId = formationIdTypedByUser.toIntOrNull() ?: 0
+            if (formationId > 0) {
                 try {
                     val formation = getFormationById(formationId)
                     addFormationContents(formation = formation, confirmWithUser = false)
-                } catch(e: FormationNotFoundException ){
+                } catch (e: FormationNotFoundException) {
                     println(makeYellowText("There's no formation with id $formationId"))
                 }
             }
-        }  else {
+        } else {
             println(makeYellowText("There are no formations registered"))
         }
         println("\n${makeWhiteText("Press any key to return to main menu")}")
@@ -174,7 +154,54 @@ class Menu(private val formations: MutableSet<Formation>) {
     }
 
 
+    private fun addFormationStudent() {
+        clearConsole()
+        if (formations.isNotEmpty()) {
+            showAllFormations()
+            println(makeWhiteText("Please, type the ID of the formation"))
+            print("Selected Formation ID: ${startForegroundGreen()}")
+            val formationIdTypedByUser = readln().trim()
+            val formationId = formationIdTypedByUser.toIntOrNull() ?: 0
+            if (formationId > 0) {
+                try {
+                    val formation = getFormationById(formationId)
+                    addFormationStudents(formation = formation, confirmWithUser = false)
+                } catch (e: FormationNotFoundException) {
+                    println(makeYellowText("There's no formation with id $formationId"))
+                }
+            }
+        } else {
+            println(makeYellowText("There are no formations registered"))
+        }
+        println("\n${makeWhiteText("Press any key to return to main menu")}")
+        readln()
+    }
+
+
+    private fun removeFormationContent() {
+        selectFormationBeforeCallFunction(::removeFormationContent)
+    }
+
+
     private fun removeFormationStudent() {
+        selectFormationBeforeCallFunction(::removeFormationStudent)
+    }
+
+
+    private fun removeFormation() {
+        selectFormationBeforeCallFunction(::removeFormation)
+    }
+
+
+    private fun removeFormation(formation: Formation) {
+        if (askUserToConfirmFormationDeletion()) {
+            formations.remove(formation)
+            println("Formation ${formation.name} deleted with success.")
+        }
+    }
+
+
+    private fun selectFormationBeforeCallFunction(functionToCallWithFormationAsArgument: (Formation) -> Unit): Unit {
         clearConsole()
         if (formations.isNotEmpty()) {
             showAllFormations()
@@ -182,16 +209,16 @@ class Menu(private val formations: MutableSet<Formation>) {
             print("Selected Formation ID: ${startForegroundGreen()}")
             val formationIdTypedByUser = readln().trim()
             resetAllAnsiEscapes()
-            val formationId  = formationIdTypedByUser.toIntOrNull() ?: 0
-            if (formationId > 0){
+            val formationId = formationIdTypedByUser.toIntOrNull() ?: 0
+            if (formationId > 0) {
                 try {
                     val formation = getFormationById(formationId)
-                    removeFormationStudent(formation = formation)
-                } catch(e: FormationNotFoundException ){
+                    functionToCallWithFormationAsArgument(formation)
+                } catch (e: FormationNotFoundException) {
                     println(makeYellowText("There's no formation with id $formationId"))
                 }
             }
-        }  else {
+        } else {
             println(makeYellowText("There are no formations registered"))
         }
         println("\n${makeWhiteText("Press any key to return to main menu")}")
@@ -199,40 +226,52 @@ class Menu(private val formations: MutableSet<Formation>) {
     }
 
 
-    private fun removeFormationStudent(formation: Formation){
+    private fun removeFormationStudent(formation: Formation) {
         if (formation.haveStudents()) {
             showAllStudents(formation)
             println(makeWhiteText("Please, type the ID of the student"))
             print("Selected Student ID: ${startForegroundGreen()}")
             val studentIdTypedByUser = readln().trim()
             resetAllAnsiEscapes()
-            val studentId  = studentIdTypedByUser.toIntOrNull() ?: 0
-            if (studentId > 0){
+            val studentId = studentIdTypedByUser.toIntOrNull() ?: 0
+            if (studentId > 0) {
                 try {
                     val student = formation.getStudentById(studentId)
                     formation.removeStudent(student)
-                } catch(e: FormationStudentNotFoundException ){
+                } catch (e: FormationStudentNotFoundException) {
                     println(makeYellowText("There's no student with id $studentId"))
                 }
             }
-        }  else {
+        } else {
             println(makeYellowText("There are no students registered"))
         }
     }
 
 
-    private fun removeFormationContent() {
-        TODO("Not yet implemented")
-    }
-
-
-    private fun removeFormation() {
-        TODO("Not yet implemented")
+    private fun removeFormationContent(formation: Formation) {
+        if (formation.haveContents()) {
+            showAllContents(formation)
+            println(makeWhiteText("Please, type the ID of the content"))
+            print("Selected Content ID: ${startForegroundGreen()}")
+            val contentIdTypedByUser = readln().trim()
+            resetAllAnsiEscapes()
+            val contentId = contentIdTypedByUser.toIntOrNull() ?: 0
+            if (contentId > 0) {
+                try {
+                    val content = formation.getContentById(contentId)
+                    formation.removeContent(content)
+                } catch (e: FormationContentNotFoundException) {
+                    println(makeYellowText("There's no content with id $contentId"))
+                }
+            }
+        } else {
+            println(makeYellowText("There are no contents registered"))
+        }
     }
 
 
     @Throws
-    private fun getFormationById(formationId:Int):Formation{
+    private fun getFormationById(formationId: Int): Formation {
         val formation: Formation = formations.filter { formation -> formation.id == formationId }.getOrElse(0) {
             throw FormationNotFoundException("There's no formation with id $it")
         }
@@ -240,38 +279,38 @@ class Menu(private val formations: MutableSet<Formation>) {
     }
 
 
-    private fun showAllFormationData(formationId:Int){
+    private fun showAllFormationData(formationId: Int) {
         val formation: Formation
         try {
             formation = getFormationById(formationId)
             showFormation(formation = formation, detailed = true)
-        } catch(e: FormationNotFoundException ){
+        } catch (e: FormationNotFoundException) {
             println(makeYellowText("There's no formation with id $formationId"))
         }
     }
 
 
-    private fun showAllFormations(){
+    private fun showAllFormations() {
         clearConsole()
         if (formations.isNotEmpty()) {
             println("Showing all formations...")
-            formations.forEach{
+            formations.forEach {
                 showFormation(it)
             }
-        }  else {
+        } else {
             println(makeYellowText("No formations registered"))
         }
     }
 
 
-    private fun makeContentText(text: String, maxSize: Int): String{
+    private fun makeContentText(text: String, maxSize: Int): String {
         val blank = "                                                                  "
         val truncatedText = "$text$blank".substring(0..maxSize)
-        return  makeCyanText(truncatedText)
+        return makeCyanText(truncatedText)
     }
 
 
-    private fun showAllStudents(formation: Formation){
+    private fun showAllStudents(formation: Formation) {
         println(" ┌─────────────────────────────────────────────────────────────────┐ ")
         println(" │ ░░░░░░░░░░░░░░░░░░░░░░░░░ Students ░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │ ")
         println(" ├─────────────────────────────────────────────────────────────────┤ ")
@@ -279,19 +318,31 @@ class Menu(private val formations: MutableSet<Formation>) {
         println(" └─────────────────────────────────────────────────────────────────┘ ")
     }
 
-    private fun showFormation(formation: Formation, detailed: Boolean = false){
+
+    private fun showAllContents(formation: Formation) {
+        println(" ┌─────────────────────────────────────────────────────────────────┐ ")
+        println(" │ ░░░░░░░░░░░░░░░░░░░░░░░░░ Contents ░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │ ")
+        println(" ├─────────────────────────────────────────────────────────────────┤ ")
+        formation.getContents().forEach { printContent(it, withBorders = false) }
+        println(" └─────────────────────────────────────────────────────────────────┘ ")
+    }
+
+
+    private fun showFormation(formation: Formation, detailed: Boolean = false) {
         val maxTitleSize = 55
         val idPadSize = 3
         val formationId = makeContentText(formation.id.toString().padStart(idPadSize, '0'), maxTitleSize)
         val formationName = makeContentText(formation.name, maxTitleSize)
-        val formationDifficultLevelName = "${formation.level.name.substring(0..0)}${formation.level.name.substring(1..< formation.level.name.length).lowercase()}"
+        val formationDifficultLevelName = "${formation.level.name.substring(0..0)}${
+            formation.level.name.substring(1..<formation.level.name.length).lowercase()
+        }"
         val formationDifficultLevel = makeContentText(formationDifficultLevelName, maxTitleSize)
         resetAllAnsiEscapes()
         println("╔═══════════════════════════════════════════════════════════════════════╗")
         println("║ ID ......... $formationId ║")
         println("║ Name ....... $formationName ║")
         println("║ Difficult .. $formationDifficultLevel ║")
-        if (detailed){
+        if (detailed) {
             println("╠═══════════════════════════════════════════════════════════════════════╣")
             println("║  ┌─────────────────────────────────────────────────────────────────┐  ║")
             println("║  │ ░░░░░░░░░░░░░░░░░░░░░░░░░ Contents ░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │  ║")
@@ -310,81 +361,87 @@ class Menu(private val formations: MutableSet<Formation>) {
     }
 
 
-    private fun printContent(content: Content){
+    private fun printContent(content: Content, withBorders: Boolean = true) {
         val contentMaxSize = 60
         val idPadSize = 3
-        val text = makeContentText("(id: ${content.id.toString().padStart(idPadSize, '0')}) ${content.name}", contentMaxSize)
-        println("║  │ ● $text │  ║")
+        val text =
+            makeContentText("(id: ${content.id.toString().padStart(idPadSize, '0')}) ${content.name}", contentMaxSize)
+        if (withBorders) println("║  │ ● $text │  ║") else println(" │ ● $text │ ")
     }
 
 
-    private fun printStudent(student: Student, withBorders: Boolean = true){
+    private fun printStudent(student: Student, withBorders: Boolean = true) {
         val contentMaxSize = 60
         val idPadSize = 7
-        val text = makeContentText("(id: ${student.id.toString().padStart(idPadSize, '0')}) ${student.name}", contentMaxSize)
+        val text =
+            makeContentText("(id: ${student.id.toString().padStart(idPadSize, '0')}) ${student.name}", contentMaxSize)
         if (withBorders) println("║  │ ▪ $text │  ║") else println(" │ ▪ $text │ ")
     }
 
 
-    private fun addFormationStudents(formation: Formation, confirmWithUser:Boolean = true){
+    private fun addFormationStudents(formation: Formation, confirmWithUser: Boolean = true) {
         val userWantToAddStudents = if (confirmWithUser) askUserWantStudents() else true
-        if (userWantToAddStudents){
+        if (userWantToAddStudents) {
             println(makePurpleText("Leave blank and press <ENTER> to finish.\n"))
             loop@ do {
                 print("Student Name: ${startForegroundGreen()}")
                 val studentNameTypedByUser = readln().trim()
                 resetAllAnsiEscapes()
-                if (studentNameTypedByUser.isEmpty()){
+                if (studentNameTypedByUser.isEmpty()) {
                     break@loop
                 }
                 print("Student birth date ($DATE_FORMAT): ${startForegroundGreen()}")
                 val studentBirthDateTypedByUser = readln().trim()
                 resetAllAnsiEscapes()
-                if (studentBirthDateTypedByUser.isEmpty()){
+                if (studentBirthDateTypedByUser.isEmpty()) {
                     println("Invalid Student Birth Date. Please, try again.")
                     continue@loop
                 }
-                if (studentBirthDateTypedByUser == EXIT_KEY){
+                if (studentBirthDateTypedByUser == EXIT_KEY) {
                     break@loop
                 }
                 val studentBirthDate = try {
                     LocalDate.parse(studentBirthDateTypedByUser, formatter)
-                } catch (e: DateTimeParseException){null}
-                if (studentBirthDate == null){
+                } catch (e: DateTimeParseException) {
+                    null
+                }
+                if (studentBirthDate == null) {
                     println("Invalid Student Birth Date. Please, try again.")
                     continue@loop
                 }
                 val student = try {
                     Student(studentNameTypedByUser, studentBirthDate)
-                } catch (e: StudentUnderageException){println("Invalid Student - Underage");  continue@loop}
+                } catch (e: StudentUnderageException) {
+                    println("Invalid Student - Underage"); continue@loop
+                }
                 formation.enrol(student)
-            } while(studentNameTypedByUser != EXIT_KEY)
+            } while (studentNameTypedByUser != EXIT_KEY)
         }
     }
 
 
-    private fun addFormationContents(formation: Formation, confirmWithUser:Boolean = true){
+    private fun addFormationContents(formation: Formation, confirmWithUser: Boolean = true) {
         val userWantToAddContents = if (confirmWithUser) askUserWantContents() else true
-        if (userWantToAddContents){
+        if (userWantToAddContents) {
             println(makePurpleText("Leave blank and press <ENTER> to finish.\n"))
             var contentTypedByUser: String
             loop@ do {
                 print("New content name: ${startForegroundGreen()}")
                 contentTypedByUser = readln().trim()
                 resetAllAnsiEscapes()
-                if (contentTypedByUser.isEmpty()){
+                if (contentTypedByUser.isEmpty()) {
                     break@loop
                 }
-                if (contentTypedByUser != EXIT_KEY){
+                if (contentTypedByUser != EXIT_KEY) {
                     val content = Content(contentTypedByUser)
                     formation.addContent(content)
                 }
-            } while(contentTypedByUser != EXIT_KEY)
+            } while (contentTypedByUser != EXIT_KEY)
         }
     }
 
 
-    private fun askUserWantStudents(): Boolean{
+    private fun askUserWantStudents(): Boolean {
         resetAllAnsiEscapes()
         println("┌──────────────────────────────────────────┐")
         println("│░░░░ Do you want to add students now? ░░░░│")
@@ -398,7 +455,7 @@ class Menu(private val formations: MutableSet<Formation>) {
     }
 
 
-    private fun askUserWantContents(): Boolean{
+    private fun askUserWantContents(): Boolean {
         resetAllAnsiEscapes()
         println("┌──────────────────────────────────────────┐")
         println("│░░░░ Do you want to add Contents now? ░░░░│")
@@ -412,7 +469,21 @@ class Menu(private val formations: MutableSet<Formation>) {
     }
 
 
-    private fun getFormationLevel():Int{
+    private fun askUserToConfirmFormationDeletion(): Boolean {
+        resetAllAnsiEscapes()
+        println("┌───────────────────────────────────────────────────────┐")
+        println("│░░░░ Do you confirm the deletion of the formation? ░░░░│")
+        println("├───────────────────────────────────────────────────────┤")
+        println("│   Y ............. Yes                                 │")
+        println("│   Other key ..... No                                  │")
+        println("└───────────────────────────────────────────────────────┘")
+        print("Selected: ${startForegroundGreen()}")
+        val addContentsUserAnswer: String = readln().trim().uppercase()
+        return "Y" == addContentsUserAnswer || "YES" == addContentsUserAnswer
+    }
+
+
+    private fun getFormationLevel(): Int {
         resetAllAnsiEscapes()
         println("┌──────────────────────────────────────────┐")
         println("│░░░░░░░ Formation Difficult Level ░░░░░░░░│")
@@ -423,8 +494,8 @@ class Menu(private val formations: MutableSet<Formation>) {
         println("└──────────────────────────────────────────┘")
         print("Selected: ${startForegroundGreen()}")
         val newFormationLevelTypedByUser: String = readln()
-        val newFormationLevel  = newFormationLevelTypedByUser.toIntOrNull() ?: return -1
-        if (newFormationLevel !in 1..3){
+        val newFormationLevel = newFormationLevelTypedByUser.toIntOrNull() ?: return -1
+        if (newFormationLevel !in 1..3) {
             println("Invalid Formation Difficult Value")
             return getFormationLevel()
         }

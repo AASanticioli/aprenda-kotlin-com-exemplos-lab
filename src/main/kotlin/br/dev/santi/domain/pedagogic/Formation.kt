@@ -43,6 +43,11 @@ class Formation private constructor(val id: Int, val name: String, val level: Co
         return students.isNotEmpty()
     }
 
+    fun haveContents(): Boolean{
+        return contents.isNotEmpty()
+    }
+
+
     fun addContent(content: Content){
         contents.add(content)
     }
@@ -58,5 +63,18 @@ class Formation private constructor(val id: Int, val name: String, val level: Co
     fun removeStudent(student: Student) {
         students.remove(student)
         println("Student '${student.name}' removed with success.")
+    }
+
+    @Throws
+    fun getContentById(contentId: Int): Content {
+        val content: Content = contents.filter { student -> student.id == contentId }.getOrElse(index = 0) {
+            throw FormationContentNotFoundException("There's no Content with id $it")
+        }
+        return content
+    }
+
+    fun removeContent(content: Content) {
+        contents.remove(content)
+        println("Content '${content.name}' removed with success.")
     }
 }
