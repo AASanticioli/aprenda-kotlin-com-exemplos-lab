@@ -32,10 +32,10 @@ class Menu(private val formations: MutableSet<Formation>) {
                 1 -> showAllFormationsOnce()
                 2 -> addFormation()
                 3 -> showFormationDetails()
-                4 -> addFormationStudent()
-                5 -> addFormationContent()
-                6 -> removeFormationStudent()
+                4 -> addFormationContent()
+                5 -> addFormationStudent()
                 6 -> removeFormationContent()
+                7 -> removeFormationStudent()
                 9 -> break@loop
             }
         }
@@ -56,9 +56,9 @@ class Menu(private val formations: MutableSet<Formation>) {
         println("│                                             │")
         println("│ ${makeYellowText("3")} ... ${makeBlueText("Show Formation Details")}                │")
         println("│                                             │")
-        println("│ ${makeYellowText("4")} ... ${makeBlueText("Add Students to an Formation")}          │")
+        println("│ ${makeYellowText("4")} ... ${makeBlueText("Add Contents to an Formation")}          │")
         println("│                                             │")
-        println("│ ${makeYellowText("5")} ... ${makeBlueText("Add Contents to an Formation")}          │")
+        println("│ ${makeYellowText("5")} ... ${makeBlueText("Add Students to an Formation")}          │")
         println("│                                             │")
         println("│ ${makeYellowText("6")} ... ${makeBlueText("Remove some Students of an Formation")}  │")
         println("│                                             │")
