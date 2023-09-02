@@ -39,7 +39,24 @@ class Formation private constructor(val id: Int, val name: String, val level: Co
         return students
     }
 
+    fun haveStudents(): Boolean{
+        return students.isNotEmpty()
+    }
+
     fun addContent(content: Content){
         contents.add(content)
+    }
+
+    @Throws
+    fun getStudentById(studentId: Int): Student {
+        val student: Student = students.filter { student -> student.id == studentId }.getOrElse(index = 0) {
+            throw FormationStudentNotFoundException("There's no Student with id $it")
+        }
+        return student
+    }
+
+    fun removeStudent(student: Student) {
+        students.remove(student)
+        println("Student '${student.name}' removed with success.")
     }
 }
