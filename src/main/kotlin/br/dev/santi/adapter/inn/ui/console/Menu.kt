@@ -181,6 +181,7 @@ class Menu(private val formations: MutableSet<Formation>) {
             println(makeWhiteText("Please, type the ID of the formation"))
             print("Selected Formation ID: ${startForegroundGreen()}")
             val formationIdTypedByUser = readln().trim()
+            resetAllAnsiEscapes()
             val formationId  = formationIdTypedByUser.toIntOrNull() ?: 0
             if (formationId > 0){
                 try {
@@ -196,12 +197,15 @@ class Menu(private val formations: MutableSet<Formation>) {
         println("\n${makeWhiteText("Press any key to return to main menu")}")
         readln()
     }
+
+
     private fun removeFormationStudent(formation: Formation){
         if (formation.haveStudents()) {
             showAllStudents(formation)
             println(makeWhiteText("Please, type the ID of the student"))
             print("Selected Student ID: ${startForegroundGreen()}")
             val studentIdTypedByUser = readln().trim()
+            resetAllAnsiEscapes()
             val studentId  = studentIdTypedByUser.toIntOrNull() ?: 0
             if (studentId > 0){
                 try {
