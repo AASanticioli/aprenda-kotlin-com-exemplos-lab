@@ -1,6 +1,6 @@
 package application
 
-import adaper.inn.ui.console.Menu
+import adapter.inn.ui.console.Menu
 import domain.pedagogic.formation.Formation
 import domain.pedagogic.formation.FormationNotFoundException
 

@@ -1,14 +1,14 @@
-package adaper.inn.ui.console
+package adapter.inn.ui.console
 
-import adaper.inn.ui.console.AnsiEscape.clearConsole
-import adaper.inn.ui.console.AnsiEscape.makeBlueText
-import adaper.inn.ui.console.AnsiEscape.makeCyanText
-import adaper.inn.ui.console.AnsiEscape.makePurpleText
-import adaper.inn.ui.console.AnsiEscape.makeRedText
-import adaper.inn.ui.console.AnsiEscape.makeWhiteText
-import adaper.inn.ui.console.AnsiEscape.makeYellowText
-import adaper.inn.ui.console.AnsiEscape.resetAllAnsiEscapes
-import adaper.inn.ui.console.AnsiEscape.startForegroundGreen
+import adapter.inn.ui.console.AnsiEscape.clearConsole
+import adapter.inn.ui.console.AnsiEscape.makeBlueText
+import adapter.inn.ui.console.AnsiEscape.makeCyanText
+import adapter.inn.ui.console.AnsiEscape.makePurpleText
+import adapter.inn.ui.console.AnsiEscape.makeRedText
+import adapter.inn.ui.console.AnsiEscape.makeWhiteText
+import adapter.inn.ui.console.AnsiEscape.makeYellowText
+import adapter.inn.ui.console.AnsiEscape.resetAllAnsiEscapes
+import adapter.inn.ui.console.AnsiEscape.startForegroundGreen
 import application.Challenge
 import domain.pedagogic.content.Content
 import domain.pedagogic.content.ContentLevel

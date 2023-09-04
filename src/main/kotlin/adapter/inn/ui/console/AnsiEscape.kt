@@ -1,4 +1,4 @@
-package adaper.inn.ui.console
+package adapter.inn.ui.console
 
 import java.time.format.DateTimeFormatter
 
